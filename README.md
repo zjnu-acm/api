@@ -1,5 +1,7 @@
 # api
 ---
+
+
 ## 全局
 出错返回非正常的httpcode，错误信息为：
 ```
@@ -9,18 +11,18 @@
 }
 ```
 
----
-
 ## 账户
 ### 登陆
 ```
-@Get user/login?username=xxxx&password=xxxx
+@Get user/login
+@Query {username,password}
 @Return {
     userId: [string] 用户Id,
     username:用户名,
     nickname:昵称,
     signature:用户签名,
-    avatarUrl:头像地址
+    avatarUrl:头像地址,
+    token
 }
 ```
 
