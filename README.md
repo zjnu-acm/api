@@ -10,11 +10,13 @@
     message:[string]
 }
 ```
-api中所有url放在${host}/api/域名下。并包含如下cookie：
+api中所有url放在`${host}/api/`域名下。并包含如下cookie：
+```
 {
     languange:'zh'|'en',
     token:'xxx'
 }
+```
 
 ## 账户
 ### 登陆
