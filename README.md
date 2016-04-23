@@ -1,7 +1,6 @@
 # api
 ---
 
-
 ## 全局
 出错返回非正常的httpcode，错误信息为：
 ```
@@ -14,7 +13,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ```
 {
     languange:'zh'|'en',
-    token:'xxx'
+    token:'xxx',
 }
 ```
 
@@ -22,15 +21,14 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 登陆
 ```
 @Get user/login
-@Query {userId,password}
+@Query {userId,password,remember}
 @Return {
     userId: [string] 用户名,
     nickname:昵称,
     signature:用户签名,
     avatarUrl:头像地址,
     classname:班级,
-    email:邮箱,
-    token
+    email:邮箱
 }
 ```
 
@@ -54,7 +52,6 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 注销
 ```
 @Put account/logout
-@Query {userId}
 @Return {}
 ```
 
