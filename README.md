@@ -10,18 +10,24 @@
     message:[string]
 }
 ```
+api中所有url放在${host}/api/域名下。并包含如下cookie：
+{
+    languange:'zh'|'en',
+    token:'xxx'
+}
 
 ## 账户
 ### 登陆
 ```
 @Get user/login
-@Query {username,password}
+@Query {userId,password}
 @Return {
-    userId: [string] 用户Id,
-    username:用户名,
+    userId: [string] 用户名,
     nickname:昵称,
     signature:用户签名,
     avatarUrl:头像地址,
+    classname:班级,
+    email:邮箱,
     token
 }
 ```
@@ -31,21 +37,22 @@
 ```
 @Post user/register
 @Body {
-    username:用户名,
-    nickname: 昵称,
-    password:密码 ,
-    signature: 签名,
-    classname: 专业班级,
+    userId:用户名,
+    nickname:昵称,
+    signature:用户签名,
+    classname:班级,
+    email:邮箱,
     avatar: [file] 上传图片
 }
 @Return {
-    userId:[string] 用户Id
+    userId:[string] 用户名
 }
 ```
 
 ### 注销
 ```
 @Put account/logout
+@Query {userId}
 @Return {}
 ```
 
@@ -53,11 +60,19 @@
 ### 获得用户排名 (ranklist)
 ```
 @Get users
+@Query {
+    filter:{
+        userId:[...],
+        classname:[...],
+        ...
+    },
+    pageIndex,
+    pageSize
+}
 @Return [{
     rank: [int] 排第几名,
-    userId:用户Id,
-    username，
-    nickname,
+    userId:用户名,
+    nickname:昵称，
     signature，
     classname,
     static:{
@@ -70,7 +85,6 @@
 ```
 @Get users/:userId
 @Return {
-    username,
     nickname,
     signature,
     avatarUrl,
@@ -82,6 +96,11 @@
 ### 题目列表
 ```
 @Get problems
+@Query {
+    pageSize,
+    pageIndex,
+    filter:{...}
+}
 @Return [{
     problemId,
     title,
@@ -101,6 +120,7 @@
 @Return {
     problemId,
     title,
+    tags:[...],
     timelimit:{java,others},
     memorylimit:{java, others}
     description,
@@ -128,6 +148,7 @@
     specialTest  //special judge程序
     show:true|false //是否在练习列表里面显示
     contestId:null, //将该题添加到contestId的竞赛中
+    tags:[...]
 }
 @Return {
     problemId
@@ -158,11 +179,6 @@
 @Put problems/:problemId/rejudge
 @Return {}
 ```
-### 搜索题目
-```
-@Get problems/search?name=xxxx
-@Return //同题目列表
-```
 
 ### 删除题目
 ```
@@ -177,7 +193,7 @@
 @Query {pageSize,pageIndex}
 @Return [{
   userId,
-  username,
+  nickname,
   problemId,
   verdict,//评测结果
   time,
@@ -198,13 +214,17 @@
 ### 竞赛列表
 ```
 @Get contests
-@Query {pageSize,pageIndex}
+@Query {pageSize,pageIndex,filter}
 @Return {
     contestId,
     title,
     startTime,
     status,
-    host:[string]举办人
+    attendsCount，//参赛人数
+    host:{ 举办人
+        userId,
+        nickname
+    }
 }
 ```
 ### 竞赛主页
@@ -214,7 +234,12 @@
     title,
     startTime,
     endTime,
-    host:[string]举办人
+    status,
+    attendsCount，//参赛人数
+    host:{ 举办人
+        userId,
+        nickname
+    }
 }
 ```
 ### 竞赛题目列表
@@ -268,13 +293,13 @@
 ```
 ### 竞赛提交状况
 ```
-@Get contests/:contestId/status
-@Query {pageSize,pageIndex}
+@Get contests/:contestId/submissions
+@Query {pageSize,pageIndex,filter}
 @Return [{
   userId,
-  username,
+  nickname,
   problemOrder,
-  verdict,//评测结果
+  verdict,//评测状态
   time,
   memory,
   compiler,//使用的编译语言
@@ -293,9 +318,7 @@
     startTime,
     endTime,
     password,//密码
-    attendId:[{
-    userId
-    }]//允许参加的人
+    attendId:[{userId}]//参加的人
 }
 ```
 ### 修改竞赛
