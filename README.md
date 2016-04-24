@@ -60,13 +60,11 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ```
 @Get users
 @Query {
-    filter:{
-        userId:[...],
-        classname:[...],
-        ...
-    },
-    pageIndex,
-    pageSize
+    userId:[...],
+    classname:[...],
+    ...
+    size,
+    page
 }
 @Return [{
     rank: [int] 排第几名,
@@ -96,9 +94,9 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ```
 @Get problems
 @Query {
-    pageSize,
-    pageIndex,
-    filter:{...}
+    size,
+    page,
+    ...其他过滤参数
 }
 @Return [{
     problemId,
@@ -254,6 +252,11 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 竞赛排名
 ```
 @Get contests/:contestId/standing
+@Query {
+    size,
+    page,
+    ...其他过滤参数
+}
 @Return [
     {
         rank:[int] 排名,
@@ -293,7 +296,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 竞赛提交状况
 ```
 @Get contests/:contestId/submissions
-@Query {pageSize,pageIndex,filter}
+@Query {size,page,...其他过滤参数}
 @Return [{
   userId,
   nickname,
@@ -336,7 +339,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 论坛列表
 ```
 @Get discuss
-@Query {pageSize,pageIndex}
+@Query {size,page,...其他过滤参数}
 @Return [{
     title,
     author:{
@@ -367,7 +370,11 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 帖子详情
 ```
 @Get discuss/:discussId
-@Query{pageSize,pageIndex}
+@Query{
+    size,
+    page,
+    ...其他过滤参数
+}
 @Return [{
     index:[int]帖子索引,
     title,
