@@ -98,24 +98,26 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
     page,
     ...其他过滤参数
 }
-@Return [{
-    problemId,
-    title,
-    tags:['Math','Dp'...]//题目标签
-    difficulty，//难易度
-    static:{
-        ac:[int] AC题数
-        submit:[int] 提交数 
-    }
-    date // 更新时间
-}]
+@Return {
+    total:1，与请求参数size对应的总页数
+    list:[{
+        problemId,
+        title,
+        tags:['Math','Dp'...]//题目标签
+        difficulty，//难易度
+        static:{
+            ac:[int] AC题数
+            submit:[int] 提交数 
+        }
+        date // 更新时间
+    }]
+}
 ```
 
 ### 题目详情
 ```
 @Get problems/:problemId
 @Return {
-    problemId,
     title,
     tags:[...],
     timelimit:{java,others},
