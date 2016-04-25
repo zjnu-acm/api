@@ -209,13 +209,12 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Query {pageSize,pageIndex}
 @Return [{
   userId,
-  nickname,
   problemId,
-  verdict,//评测结果
+  verdictId,//评测结果
   time,
   memory,
-  compiler,//使用的编译语言
-  codeLength,
+  language,//使用的编译语言
+  length,
   submitTime,
   compileError:'xxxx' //编译错误详情
 }]
