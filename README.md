@@ -96,7 +96,9 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Query {
     size,
     page,
-    ...其他过滤参数
+    ...其他过滤参数,eg:
+    title:'A+B',
+    problemId:[1,2,3]
 }
 @Return {
     total:1，与请求参数size对应的总页数
@@ -120,11 +122,15 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Return {
     title,
     tags:[...],
+    difficulty,
     timelimit:{java,others},
     memorylimit:{java, others}
     description,
     input,
     output,
+    sampleInput,
+    sampleOutput,
+    hint,
     source,
     static:{
         ac:[int] AC题数
@@ -137,11 +143,15 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Post problems
 @Body {
     title,
+    difficulty,
     timelimit:{java,others},
     memorylimit:{java, others}
     description,
     input,
     output,
+    sampleInput,
+    sampleOutput,
+    hint,
     source,
     files, //测试数据文件
     specialTest  //special judge程序
@@ -161,12 +171,19 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 }
 @Return {}
 ```
-
+### 获得可选语言
+```
+@Get problems/language
+@Return [{
+    id,
+    name
+}]
+```
 ### 提交题目
 ```
 @Post problems/:problemId/submit
 @Body {
-    compiler:''//语言
+    id:''//语言
     code
 }
 @Return {
