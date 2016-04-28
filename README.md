@@ -206,7 +206,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 提交状态列表
 ```
 @Get submissions
-@Query {pageSize,pageIndex}
+@Query {size,page,problemId,userId,verdictId...一些过滤参数}
 @Return [{
   userId,
   problemId,
@@ -229,17 +229,14 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ### 竞赛列表
 ```
 @Get contests
-@Query {pageSize,pageIndex,filter}
+@Query {size,page,title,statusId}
 @Return {
     contestId,
     title,
     startTime,
-    status,
+    endTime,
+    statusId,//0-未开始，1-正在进行，2-已完成
     attendsCount，//参赛人数
-    host:{ 举办人
-        userId,
-        nickname
-    }
 }
 ```
 ### 竞赛主页
@@ -249,7 +246,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
     title,
     startTime,
     endTime,
-    status,
+    statusId,
     attendsCount，//参赛人数
     host:{ 举办人
         userId,
