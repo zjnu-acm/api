@@ -171,19 +171,21 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 }
 @Return {}
 ```
-### 获得可选语言
+
+### 获得可选编程语言
 ```
-@Get problems/language
+@Get languages
 @Return [{
-    id,
+    languangeId,
     name
 }]
 ```
+
 ### 提交题目
 ```
 @Post problems/:problemId/submit
 @Body {
-    id:''//语言
+    languangeId:''//语言
     code
 }
 @Return {
@@ -213,12 +215,30 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
   verdictId,//评测结果
   time,
   memory,
-  language,//使用的编译语言
+  languageId,//使用的编译语言
   length,
   submitTime,
   compileError:'xxxx' //编译错误详情
+  accessible:[true|false] //当前用户是否可以访问该提交的源代码
 }]
 
+```
+### 提交详情
+```
+@Get submissions/:submission
+@Return {
+    userId,
+    problemId,
+    verdictId,//评测结果
+    time,
+    memory,
+    languageId,//使用的编译语言
+    length,
+    submitTime,
+    code,
+    compileError:'xxxx' //编译错误详情
+    accessible:[true|false] //当前用户是否可以访问该提交的源代码
+}
 ```
 ### rejudge 某个提交
 ```
@@ -226,6 +246,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ```
 
 ## 竞赛
+
 ### 竞赛列表
 ```
 @Get contests
@@ -293,6 +314,8 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
     }
 ]
 ```
+
+
 ### 竞赛题目详情
 ```
 @Get contests/:contestId/problems/:problemOrder
@@ -308,19 +331,28 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
     static:{ac,submit}
 }
 ```
+### 获得竞赛可选编程语言
+```
+@Get contests/:contestId/languages  
+@Return [{
+    languangeId,
+    name
+}]
+```
 ### 竞赛提交状况
 ```
 @Get contests/:contestId/submissions
 @Query {size,page,...其他过滤参数}
 @Return [{
   userId,
-  nickname,
   problemOrder,
-  verdict,//评测状态
+  verdictId,//评测状态
+  languageId,
   time,
   memory,
+  accessible:[true}false],
   compiler,//使用的编译语言
-  codeLength,
+  length,
   submitTime,
   compileError:'xxxx' //编译错误详情
 }]
