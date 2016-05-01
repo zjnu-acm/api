@@ -83,6 +83,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Get users/:userId
 @Return {
     nickname,
+    email,
     signature,
     avatarUrl,
     classname,
