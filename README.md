@@ -292,23 +292,19 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 @Query {
     size,
     page,
-    ...其他过滤参数
+    problemOrders:['A','B','C','D']//所有题目
 }
 @Return [
     {
         rank:[int] 排名,
         userId,
-        solved,
-        time,
+        accepts,
+        penalty,//以秒为单位
         nickname,
         status:{
-            problemOrder1:{
-                time,
-                penalty
-            },
-            problemOrder2:{
-                time,
-                penalty
+            problemOrder1:{//没有尝试过的题目不要放进来
+                penalty,
+                attempts//该ac之前总提交次数
             }
             ...
         }
@@ -344,7 +340,9 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 ```
 @Get contests/:contestId/submissions
 @Query {size,page,...其他过滤参数}
-@Return [{
+@Return {
+    total:10,
+    list:[{
   userId,
   problemOrder,
   verdictId,//评测状态
@@ -357,6 +355,8 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
   submitTime,
   compileError:'xxxx' //编译错误详情
 }]
+    
+}
 ```
 
 ### 添加竞赛
@@ -386,82 +386,76 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
 
 ### 论坛列表
 ```
-@Get discuss
-@Query {size,page,...其他过滤参数}
-@Return [{
-    title,
-    author:{
-        userId,
-        nickname,
-        avatarUrl,
-        classname
-    }
-    reply:[int]回复数
-}]
+@Get topics
+@Query {size,page,keyword}
+@Return {
+    total:30,
+    list:[{
+        topicId,
+        title,
+        author:{
+            userId,
+            nickname,
+            avatarUrl
+        }
+        reply:[int]回复数
+    }]
+}
 ```
 ### 添加帖子
 ```
-@Post discuss
+@Post topics
 @Body {
     title,
     content,
     userId
 }
-@Return {dicussId}
+@Return {topicId}
 ```
 ### 删除帖子
 ```
-@Delete discuss/:discussId
+@Delete topics/:topicId
 @Return {}
 ```
 
 ### 帖子详情
 ```
-@Get discuss/:discussId
+@Get topics/:topicId
 @Query{
     size,
-    page,
-    ...其他过滤参数
+    page
 }
-@Return [{
-    index:[int]帖子索引,
-    title,
-    content,
-    reply:0[int]要回复帖子的索引
-    author:{
-        userId,
-        nickname,
-        avatarUrl,
-        classname
-    }
-}]
+@Return {
+    total:10,
+    list: [{
+        postId:[int]帖子索引,
+        title,
+        content,
+        replyId:0[int]要回复帖子的索引
+        author:{
+            userId,
+            nickname,
+            avatarUrl
+        }
+    }]
+}
 ```
 
 ### 回复帖子
 ```
-@Post discuss/:discussId
+@Post topicId/:topic/:postId
 @Body{
     userId,
     title,
-    content,
-    reply:0
+    content
 }
 @Return {
-    index:[int]帖子索引,
-    title,
-    content,
-    reply:[int]要回复帖子的索引
-    author:{
-        userId,
-        nickname,
-        avatarUrl,
-        classname
-    }
+  postId
 }
 ```
 ###删除回复
 ```
-@Delete discuss/:discussId/:index
+@Delete topics/:topicId/:postId
 @Return {}
 ```
 
