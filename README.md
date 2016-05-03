@@ -66,7 +66,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
     size,
     page
 }
-@Return [{
+@Return {total:10,list:[{
     rank: [int] 排第几名,
     userId:用户名,
     nickname:昵称，
@@ -76,7 +76,7 @@ api中所有url放在`${host}/api/`域名下。并包含如下cookie：
         ac:[int] AC题数
         submit:[int] 提交数 
     }
-}]
+}]}
 ```
 ### 获得用户详情
 ```
